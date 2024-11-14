@@ -26,7 +26,7 @@ class DatabaseShow {
       version: 1,
       onCreate: (db, version) async {
         await db.execute(
-            'CREATE TABLE notes (id INTEGER PRIMARY KEY AUTOINCREMENT , title TEXT, content TEXT ,   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)');
+            'CREATE TABLE notes (id INTEGER PRIMARY KEY AUTOINCREMENT , title TEXT, content TEXT , user_id INTEGER ,   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)');
         await db.execute(
             'CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT , username TEXT)');
       },
@@ -49,12 +49,12 @@ class DatabaseShow {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getNotesByUserId(int UsernameId) async {
+  Future<List<Map<String, dynamic>>> getNotesByUserId(int UserId) async {
     final Ndb = await databaseget;
     return await Ndb.query(
       'notes',
       where: 'user_id = ?',
-      whereArgs: [UsernameId],
+      whereArgs: [UserId],
     );
   }
 

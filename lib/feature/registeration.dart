@@ -84,21 +84,20 @@ class registerationLogin extends StatelessWidget {
                       ElevatedButton(
                         onPressed: () async {
                           if (globalKey.currentState!.validate()) {
-                            dynamic UsernameID =
-                                await db1.ForLoginUser(userIdController.text);
+                            int? UserID =
+                                await db1.ForLoginUser(usernameController.text);
 
-                            if (UsernameID != null) {
+                            if (UserID != null) {
                               await SharedPreferenceShow.setUsername(
                                   usernameController.text);
                               await SharedPreferenceShow.setLogin(true);
-                              await SharedPreferenceShow.setUsernameId(
-                                  UsernameID);
+                              await SharedPreferenceShow.setUserId(UserID);
 
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => homePage(
-                                            UsernameId: UsernameID,
+                                            UsernameId: UserID,
                                           )));
                             }
                           }

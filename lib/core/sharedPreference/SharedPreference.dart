@@ -32,11 +32,11 @@ class SharedPreferenceShow {
     return prefs.getBool(KeyLogin);
   }
 
-  static Future<void> setUsernameId(int usernameId) async {
+  static Future<void> setUserId(int usernameId) async {
     await prefs.setInt(KeyUserID, usernameId);
   }
 
-  static Future<int?> getUsernameId() async {
+  static Future<int?> getUserId() async {
     return prefs.getInt(KeyUserID);
   }
 }

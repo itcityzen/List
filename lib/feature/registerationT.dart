@@ -1,3 +1,5 @@
+import 'package:database_task/core/database/database.dart';
+import 'package:database_task/core/sharedPreference/SharedPreference.dart';
 import 'package:database_task/core/widgets/textfieldCustom.dart';
 import 'package:database_task/feature/home.dart';
 import 'package:database_task/feature/registeration.dart';
@@ -5,11 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class registerationSign extends StatelessWidget {
-  late int? UsernameID ;
-  
+  late int? UsernameID;
+
   GlobalKey<FormState> globalKey = GlobalKey<FormState>();
-  TextEditingController emailController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  DatabaseShow db1 = DatabaseShow();
 
   registerationSign({super.key});
 
@@ -52,14 +55,14 @@ class registerationSign extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 15,
                                 backgroundColor: Colors.black,
-                                color:Colors.cyan[50]   ))
+                                color: Colors.cyan[50]))
                       ])),
                       SizedBox(
                         height: 50,
                       ),
                       textFieldCustomed(
                         Label: 'Email',
-                        Controller: emailController,
+                        Controller: usernameController,
                         icon: Icon(Icons.email),
                       ),
                       SizedBox(
@@ -73,12 +76,24 @@ class registerationSign extends StatelessWidget {
                         height: 25,
                       ),
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (globalKey.currentState!.validate()) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => homePage(UsernameId: UsernameID,)));
+                            int? UserID = await db1.ForRegisterUser(
+                                {'username': usernameController.text});
+
+                            if (UserID != null) {
+                              await SharedPreferenceShow.setLogin(true);
+                              await SharedPreferenceShow.setUsername(
+                                  usernameController.text);
+                              await SharedPreferenceShow.setUserId(UserID);
+
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => homePage(
+                                            UsernameId: UserID,
+                                          )));
+                            }
                           }
                         },
                         child: Text(
