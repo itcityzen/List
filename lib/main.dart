@@ -20,17 +20,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: isLogged? homePage():splashAnimatedScreen() ,
+      home: isLogged? homePage(UserId: UserID,):splashAnimatedScreen() ,
     );
   }
 }
 
 bool isLogged = false;
+late int? UserID ;
 Future checkLogin() async {
   bool? isLogin = await SharedPreferenceShow.getLogin();
   if (isLogin != null) {
     isLogged = true;
+    UserID = await SharedPreferenceShow.getUserId();
+
   }else{isLogged = false;}
 }
 
-late int? UsernameID ;

@@ -97,9 +97,13 @@ class registerationLogin extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => homePage(
-                                            UsernameId: UserID,
+                                            UserId: UserID,
                                           )));
                             }
+                            else {
+                              print("User is not Found");
+                            }
+
                           }
                         },
                         child: Text(

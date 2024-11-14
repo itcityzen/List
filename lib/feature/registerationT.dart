@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class registerationSign extends StatelessWidget {
-  late int? UsernameID;
-
   GlobalKey<FormState> globalKey = GlobalKey<FormState>();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -91,8 +89,10 @@ class registerationSign extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => homePage(
-                                            UsernameId: UserID,
+                                            UserId: UserID,
                                           )));
+                            } else {
+                              print('Username is already existed');
                             }
                           }
                         },

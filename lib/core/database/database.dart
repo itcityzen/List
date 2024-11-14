@@ -26,17 +26,21 @@ class DatabaseShow {
       version: 1,
       onCreate: (db, version) async {
         await db.execute(
-            'CREATE TABLE notes (id INTEGER PRIMARY KEY AUTOINCREMENT , title TEXT, content TEXT , user_id INTEGER ,   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)');
+            'CREATE TABLE notes (id INTEGER PRIMARY KEY AUTOINCREMENT , title TEXT, content TEXT , user_id INTEGER , '
+                '  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)');
         await db.execute(
-            'CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT , username TEXT)');
+            'CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT , username TEXT UNIQUE)');
       },
     );
   }
 
-  Future ForRegisterUser(Map<String, dynamic> un) async {
+  Future  <int?> ForRegisterUser(Map<String, dynamic> un) async {
     final Ndb = await databaseget;
+    try{
     return await Ndb.insert(tableUsername, un);
   }
+  catch(e){print(e.toString());
+    return null ; }}
 
   Future<int?> ForLoginUser(String un) async {
     final Ndb = await databaseget;
@@ -54,8 +58,7 @@ class DatabaseShow {
     return await Ndb.query(
       'notes',
       where: 'user_id = ?',
-      whereArgs: [UserId],
-    );
+      whereArgs: [UserId]);
   }
 
   Future insertNotes(Map<String, dynamic> newNote) async {
@@ -64,11 +67,15 @@ class DatabaseShow {
     return await Ndb.insert(tableName, newNote);
   }
 
+/*
+
   Future<List<Map<String, dynamic>>> getallNotes() async {
     print('get all  this notes  ');
     final Ndb = await databaseget;
     return await Ndb.query(tableName);
   }
+
+ */
 
   Future<int> deleteNote(int id) async {
     final Ndb = await databaseget;

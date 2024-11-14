@@ -25,18 +25,25 @@ class SharedPreferenceShow {
   }
 
   static Future setLogin(bool Login) async {
+    print('Login is set');
     await prefs.setBool(KeyLogin, Login);
   }
 
   static Future<bool?> getLogin() async {
+    print('Login is get');
+
     return prefs.getBool(KeyLogin);
   }
 
   static Future<void> setUserId(int usernameId) async {
+    print('UserID is set');
+
     await prefs.setInt(KeyUserID, usernameId);
   }
 
   static Future<int?> getUserId() async {
+    print('UserID is get');
+
     return prefs.getInt(KeyUserID);
   }
 }

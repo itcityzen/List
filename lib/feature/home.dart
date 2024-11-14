@@ -8,8 +8,8 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:database_task/core/database/database.dart';
 
 class homePage extends StatefulWidget {
-  final int? UsernameId;
-  const homePage({super.key,  this.UsernameId});
+  final int? UserId;
+  const homePage({super.key, required this.UserId});
 
   @override
   State<homePage> createState() => _homePageState();
@@ -28,40 +28,45 @@ class _homePageState extends State<homePage> {
   Future getUsernameofSet() async {
     print('waiting username');
     String? uname = await SharedPreferenceShow.getUsername();
-    setState(() {
+
       if (uname != null) {
         print('username is done $uname');
         setState(() {
           UsernameSharedPreference = uname;
         });
       }
-    });
     print('isget Done $UsernameSharedPreference');
   }
 
   DatabaseShow db1 = DatabaseShow();
+
+
   List<Map<String, dynamic>> myNotes = [];
 
   Future fetchNotes() async {
-    if (widget.UsernameId != null) {
-      final showData = await db1.getNotesByUserId(widget.UsernameId!);
+    if (widget.UserId != null) {
+      final showData = await db1.getNotesByUserId(widget.UserId!);
       setState(() {
         myNotes = showData;
       });
     }
+    print('Notes is fetched');
   }
+
+  TextEditingController titleController = TextEditingController();
+  TextEditingController contentController = TextEditingController();
 
   Future addnote() async {
     await db1.insertNotes({
       'title': titleController.text,
       'content': contentController.text,
+      'user_id' : widget.UserId!
+
     });
     await fetchNotes();
     Navigator.pop(context);
   }
 
-  TextEditingController titleController = TextEditingController();
-  TextEditingController contentController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,35 +105,37 @@ class _homePageState extends State<homePage> {
           Expanded(
               child: myNotes.isEmpty
                   ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 100,
-                          ),
-                          Image.asset(
-                            'assets/content-style-vector.jpg',
-                            width: 300,
-                            height: 300,
-                          ),
-                          SizedBox(
-                            height: 30,
-                          ),
-                          Divider(
-                            height: 10,
-                            thickness: 25,
-                            color: Colors.cyan[50],
-                          ),
-                          Text(
-                            'There is no Notes Yet',
-                            style: GoogleFonts.abhayaLibre(
-                              textStyle: TextStyle(
-                                  fontSize: 35,
-                                  color: Colors.black,
-                                  backgroundColor: Colors.cyan[50]),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 100,
                             ),
-                          ),
-                        ],
+                            Image.asset(
+                              'assets/content-style-vector.jpg',
+                              width: 300,
+                              height: 300,
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Divider(
+                              height: 10,
+                              thickness: 25,
+                              color: Colors.cyan[50],
+                            ),
+                            Text(
+                              'There is no Notes Yet',
+                              style: GoogleFonts.abhayaLibre(
+                                textStyle: TextStyle(
+                                    fontSize: 35,
+                                    color: Colors.black,
+                                    backgroundColor: Colors.cyan[50]),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     )
                   : ListView.builder(
